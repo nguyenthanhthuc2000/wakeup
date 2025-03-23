@@ -28,7 +28,6 @@ php artisan key:generate
 ```
 
 7. In the first time build source code, you run migrate database and create masterdata: <br>
-Manual
 ```
 php artisan migrate --seed
 ```
@@ -40,4 +39,6 @@ php artisan migrate --seed
 Access the application Open http://localhost or http://wakeup.local
 
 9. To stop Docker
-Manual ```docker-compose down```
+```
+docker-compose down
+```
