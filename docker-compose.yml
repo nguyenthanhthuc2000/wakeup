@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: wakeup-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/app
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - wakeup-network
+
+  php:
+    build:
+      context: './docker/php-fpm'
+      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: 8.2
+    container_name: wakeup-php
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./src:/app
+      - ./docker/php-fpm/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - wakeup-network
+
+  mysql:
+    image: mysql:8.0.28
+    container_name: wakeup-mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wakeup
+    networks:
+      - wakeup-network
+
+networks:
+  wakeup-network:
+    driver: bridge
